@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, forwardRef, useImperativeHandle } from 'react';
 
 import AIControls from './components/AIControls';
 import AuthProvider, { useAuth } from './components/AuthProvider';
@@ -6,6 +6,8 @@ import AuthForm from './components/AuthForm';
 
 
 import KanbanBoard from './components/KanbanBoard';
+import React, { useRef } from 'react';
+import { Dialog, DialogTitle, DialogContent, DialogActions, TextField } from '@mui/material';
 import Navbar from './components/Navbar';
 import Sidebar from './components/Sidebar';
 import CanvasBoard from './components/CanvasBoard';
@@ -25,6 +27,22 @@ const MainApp = ({ user, onLogout }) => {
 
   // Dashboard state
   const [dashboard, setDashboard] = useState([
+  // New Task dialog state
+  const [newTaskOpen, setNewTaskOpen] = useState(false);
+  const [newTaskValue, setNewTaskValue] = useState('');
+  const kanbanRef = useRef();
+
+  const handleOpenNewTask = () => setNewTaskOpen(true);
+  const handleCloseNewTask = () => {
+    setNewTaskOpen(false);
+    setNewTaskValue('');
+  };
+  const handleSubmitNewTask = async () => {
+    if (kanbanRef.current && newTaskValue.trim()) {
+      await kanbanRef.current.addTaskFromParent(newTaskValue);
+      handleCloseNewTask();
+    }
+  };
     { label: 'Tasks', value: 0, color: 'primary.main' },
     { label: 'Team Members', value: 0, color: 'secondary.main' },
     { label: 'Active Boards', value: 0, color: 'success.main' },
@@ -158,7 +176,7 @@ const MainApp = ({ user, onLogout }) => {
             </Grid>
             <Box sx={{ display: 'flex', gap: 2, mb: 2, flexWrap: 'wrap' }}>
               <Tooltip title="Create a new task" arrow>
-                <Button variant="contained" color="primary" startIcon={<Add />} sx={{ minWidth: 140 }}>
+                <Button variant="contained" color="primary" startIcon={<Add />} sx={{ minWidth: 140 }} onClick={handleOpenNewTask}>
                   New Task
                 </Button>
               </Tooltip>
@@ -181,10 +199,30 @@ const MainApp = ({ user, onLogout }) => {
               </Typography>
             </Fade>
             {selected === 'profile' && <Profile />}
-            {selected === 'kanban' && <KanbanBoard />}
+            {selected === 'kanban' && <KanbanBoard ref={kanbanRef} />}
             {selected === 'canvas' && <CanvasBoard />}
             {selected === 'ai' && <AIControls />}
             {selected === 'settings' && <div>Settings coming soon...</div>}
+            {/* New Task Dialog */}
+            <Dialog open={newTaskOpen} onClose={handleCloseNewTask} maxWidth="xs" fullWidth>
+              <DialogTitle>Add New Task</DialogTitle>
+              <DialogContent>
+                <TextField
+                  autoFocus
+                  margin="dense"
+                  label="Task Title"
+                  type="text"
+                  fullWidth
+                  value={newTaskValue}
+                  onChange={e => setNewTaskValue(e.target.value)}
+                  onKeyDown={e => { if (e.key === 'Enter') handleSubmitNewTask(); }}
+                />
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleCloseNewTask}>Cancel</Button>
+                <Button onClick={handleSubmitNewTask} variant="contained" disabled={!newTaskValue.trim()}>Add</Button>
+              </DialogActions>
+            </Dialog>
             <Divider sx={{ mt: 3, mb: 1 }} />
             {/* Footer */}
             <Box sx={{ textAlign: 'center', color: 'text.secondary', fontSize: 13, mt: 2 }}>

@@ -17,7 +17,7 @@ const initialData = {
 
 const KanbanBoard = () => {
   const [data, setData] = useState(initialData);
-  const [newTask, setNewTask] = useState('');
+  // Removed newTask state
   const [loading, setLoading] = useState(false);
   const [editingTaskId, setEditingTaskId] = useState(null);
   const [editingValue, setEditingValue] = useState('');
@@ -156,8 +156,9 @@ const KanbanBoard = () => {
     });
   };
 
-  const handleAddTask = async () => {
-    if (!newTask.trim()) return;
+  // Add task handler to be triggered externally
+  const handleAddTask = async (taskTitle) => {
+    if (!taskTitle.trim()) return;
     setLoading(true);
     const token = localStorage.getItem('token');
     const res = await fetch('/api/tasks', {
@@ -166,10 +167,9 @@ const KanbanBoard = () => {
         'Content-Type': 'application/json',
         ...(token ? { 'Authorization': `Bearer ${token}` } : {})
       },
-      body: JSON.stringify({ title: newTask, status: 'todo' }),
+      body: JSON.stringify({ title: taskTitle, status: 'todo' }),
     });
     const task = await res.json();
-    // Add new task to board
     setData(prev => ({
       ...prev,
       tasks: { ...prev.tasks, [task._id]: { id: task._id, content: task.title } },
@@ -181,21 +181,11 @@ const KanbanBoard = () => {
         },
       },
     }));
-    setNewTask('');
     setLoading(false);
   };
 
   return (
     <Box sx={{ flexGrow: 1, mt: 4 }}>
-      <Box sx={{ mb: 2, display: 'flex', gap: 2 }}>
-        <TextField
-          label="Add Task"
-          value={newTask}
-          onChange={e => setNewTask(e.target.value)}
-          size="small"
-        />
-        <Button variant="contained" onClick={handleAddTask}>Add</Button>
-      </Box>
       {error && <div style={{ color: 'red', marginBottom: 8 }}>{error}</div>}
       <DragDropContext onDragEnd={onDragEnd}>
         <Grid container columns={12} columnSpacing={2}>

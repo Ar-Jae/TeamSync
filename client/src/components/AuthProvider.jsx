@@ -1,5 +1,5 @@
 
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useState, useContext, useEffect } from 'react';
 
 const AuthContext = createContext();
 
@@ -9,6 +9,33 @@ const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(localStorage.getItem('token') || '');
   const [error, setError] = useState('');
+
+  // Restore user from token on mount
+  useEffect(() => {
+    const storedToken = localStorage.getItem('token');
+    if (storedToken && !user) {
+      // Optionally, fetch user info from API using the token
+  fetch('/api/users/me', {
+        headers: { 'Authorization': `Bearer ${storedToken}` }
+      })
+        .then(res => res.ok ? res.json() : null)
+        .then(data => {
+          if (data && !data.error) {
+            setUser(data);
+            setToken(storedToken);
+          } else {
+            setUser(null);
+            setToken('');
+            localStorage.removeItem('token');
+          }
+        })
+        .catch(() => {
+          setUser(null);
+          setToken('');
+          localStorage.removeItem('token');
+        });
+    }
+  }, []);
 
   const login = async (email, password) => {
     setError('');

@@ -6,7 +6,6 @@ import AuthForm from './components/AuthForm';
 
 
 import KanbanBoard from './components/KanbanBoard';
-import React, { useRef } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, TextField } from '@mui/material';
 import Navbar from './components/Navbar';
 import Sidebar from './components/Sidebar';
@@ -27,6 +26,11 @@ const MainApp = ({ user, onLogout }) => {
 
   // Dashboard state
   const [dashboard, setDashboard] = useState([
+    { label: 'Tasks', value: 0, color: 'primary.main' },
+    { label: 'Team Members', value: 0, color: 'secondary.main' },
+    { label: 'Active Boards', value: 0, color: 'success.main' },
+    { label: 'AI Actions', value: 0, color: 'info.main' },
+  ]);
   // New Task dialog state
   const [newTaskOpen, setNewTaskOpen] = useState(false);
   const [newTaskValue, setNewTaskValue] = useState('');
@@ -43,11 +47,6 @@ const MainApp = ({ user, onLogout }) => {
       handleCloseNewTask();
     }
   };
-    { label: 'Tasks', value: 0, color: 'primary.main' },
-    { label: 'Team Members', value: 0, color: 'secondary.main' },
-    { label: 'Active Boards', value: 0, color: 'success.main' },
-    { label: 'AI Actions', value: 0, color: 'info.main' },
-  ]);
   useEffect(() => {
     const fetchDashboard = async () => {
       try {

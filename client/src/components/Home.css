@@ -1,0 +1,7 @@
+.home-page { width:100%; display:flex; justify-content:center; align-items:flex-start; padding:40px 20px; }
+.home-container { max-width:980px; width:100%; background:white; border-radius:8px; padding:28px; box-shadow:0 6px 18px rgba(0,0,0,0.06); }
+.home-container h1 { margin:0 0 12px; font-size:28px; }
+.home-container .lead { color:#6b7280; margin-bottom:18px }
+.home-links { display:flex; gap:12px; flex-wrap:wrap }
+.home-card { padding:12px 16px; background:#f3f4f6; border-radius:8px; color:#111827; text-decoration:none; font-weight:600 }
+.home-card:hover { background:#e5e7eb }

@@ -5,6 +5,7 @@ import { useMediaQuery } from '@mui/material';
 import AIControls from './components/AIControls';
 import AuthProvider, { useAuth } from './components/AuthProvider';
 import AuthForm from './components/AuthForm';
+import Home from './components/Home';
 
 
 import KanbanBoard from './components/KanbanBoard';
@@ -34,7 +35,7 @@ const MainApp = ({ user, onLogout }) => {
           <Sidebar />
           <Box component="main" sx={{ flexGrow: 1, p: isMobile ? 1 : 3, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start' }}>
             <Routes>
-              <Route path="/" element={<Navigate to="/boards/kanban" replace />} />
+              <Route path="/" element={<Home />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/boards/kanban" element={<KanbanBoard />} />
               <Route path="/boards/taskboard" element={<TaskBoard />} />

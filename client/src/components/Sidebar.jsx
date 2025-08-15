@@ -70,12 +70,12 @@ export default function Sidebar({ selected = "home", onSelect }) {
         {mainNav.map(({ name, key, icon: Icon, highlight }) => {
           // Map keys to route paths
           let to = "/";
-          if (key === "home") to = "/kanban";
-          else if (key === "dashboard") to = "/kanban";
-          else if (key === "projects") to = "/kanban";
-          else if (key === "taskboard") to = "/taskboard";
+          if (key === "home") to = "/boards/kanban";
+          else if (key === "dashboard") to = "/boards/kanban";
+          else if (key === "projects") to = "/boards/kanban";
+          else if (key === "taskboard") to = "/boards/taskboard";
           else if (key === "chat") to = "/chat";
-          else if (key === "reporting") to = "/ai";
+          else if (key === "reporting") to = "/tools/ai";
           else to = `/${key}`;
           return (
             <div key={key} className="sidebar-nav-item">

@@ -34,12 +34,12 @@ const MainApp = ({ user, onLogout }) => {
           <Sidebar />
           <Box component="main" sx={{ flexGrow: 1, p: isMobile ? 1 : 3, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start' }}>
             <Routes>
-              <Route path="/" element={<Navigate to="/kanban" replace />} />
+              <Route path="/" element={<Navigate to="/boards/kanban" replace />} />
               <Route path="/profile" element={<Profile />} />
-              <Route path="/kanban" element={<KanbanBoard />} />
-              <Route path="/taskboard" element={<TaskBoard />} />
-              <Route path="/canvas" element={<CanvasBoard />} />
-              <Route path="/ai" element={<AIControls />} />
+              <Route path="/boards/kanban" element={<KanbanBoard />} />
+              <Route path="/boards/taskboard" element={<TaskBoard />} />
+              <Route path="/boards/canvas" element={<CanvasBoard />} />
+              <Route path="/tools/ai" element={<AIControls />} />
               <Route path="/chat" element={<ChatView />} />
               <Route path="/settings" element={<div>Settings coming soon...</div>} />
             </Routes>

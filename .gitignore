@@ -3,3 +3,10 @@ node_modules
 .DS_Store
 .env
 client/node_modules/
+
+# Ignore dependencies and build outputs
+/client/node_modules/
+/client/build/
+node_modules/
+/dist/
+.DS_Store

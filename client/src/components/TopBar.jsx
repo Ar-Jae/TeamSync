@@ -1,10 +1,12 @@
 import React from "react";
 import './TopBar.css';
-import { BellIcon, Cog6ToothIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import { BellIcon, Cog6ToothIcon, MagnifyingGlassIcon, ArrowRightOnRectangleIcon } from "@heroicons/react/24/outline";
 import { useAuth } from "./AuthProvider";
+import ConfirmDialog from './ConfirmDialog';
 
 export default function TopBar({ onSettings }) {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
+  const [confirmOpen, setConfirmOpen] = React.useState(false);
   return (
     <header className="topbar">
       <div className="topbar-left">
@@ -22,10 +24,20 @@ export default function TopBar({ onSettings }) {
         <button className="topbar-btn" aria-label="Settings" onClick={onSettings}>
           <Cog6ToothIcon className="topbar-icon" />
         </button>
+        <button className="topbar-btn" aria-label="Logout" onClick={() => setConfirmOpen(true)} title="Log out">
+          <ArrowRightOnRectangleIcon className="topbar-icon" />
+        </button>
         <div className="topbar-profile">
           <img src={user?.avatar || "/default-avatar.png"} alt="avatar" className="topbar-avatar" />
         </div>
       </div>
+      <ConfirmDialog
+        open={confirmOpen}
+        title="Log out"
+        message="Are you sure you want to log out?"
+        onCancel={() => setConfirmOpen(false)}
+        onConfirm={() => { setConfirmOpen(false); logout(); }}
+      />
     </header>
   );
 }

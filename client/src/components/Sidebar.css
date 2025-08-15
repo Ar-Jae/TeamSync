@@ -21,6 +21,10 @@
   width: 16rem;
 }
 
+.sidebar {
+  transition: width 220ms cubic-bezier(.4,0,.2,1), background 180ms;
+}
+
 /* Toggle Button */
 .sidebar-toggle {
   background: none;
@@ -97,6 +101,7 @@
   outline: none;
   width: 100%;
 }
+.sidebar-search .icon{ width:1.05rem; height:1.05rem; color:#bdbdbd }
 
 /* Navigation */
 .sidebar-nav {
@@ -242,3 +247,14 @@
 .sidebar-profile-menu:hover {
   background: #292a32;
 }
+
+.sidebar-logout{
+  background: #7c3aed;
+  color: #fff;
+  border:none;
+  padding:6px 10px;
+  border-radius:6px;
+  font-size:0.9rem;
+  cursor:pointer;
+}
+.sidebar-logout:hover{ filter:brightness(.95) }

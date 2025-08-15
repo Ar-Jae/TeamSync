@@ -1,6 +1,8 @@
 
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import ConfirmDialog from './ConfirmDialog';
+import Toast from './Toast';
 import { NavLink } from 'react-router-dom';
 import { useAuth } from "./AuthProvider";
 import './Sidebar.css';
@@ -39,9 +41,37 @@ const lowerNav = [
 
 
 export default function Sidebar({ selected = "home", onSelect }) {
-  const { user } = useAuth();
-  const [expanded, setExpanded] = useState(true);
+  const { user, logout } = useAuth();
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [expanded, setExpanded] = useState(() => {
+    try { return localStorage.getItem('sidebarExpanded') !== 'false'; } catch(e) { return true }
+  });
+  const [query, setQuery] = useState('');
   const handleToggle = () => setExpanded((prev) => !prev);
+  useEffect(() => {
+    try { localStorage.setItem('sidebarExpanded', expanded ? 'true' : 'false'); } catch(e) {}
+  }, [expanded]);
+  useEffect(() => {
+    // Persist to server for logged-in users
+    const persist = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) return;
+        await fetch('/api/users/me', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+          body: JSON.stringify({ preferences: { sidebarExpanded: expanded } })
+        });
+    setToast({ open: true, message: 'Sidebar preference saved', severity: 'success' });
+      } catch (e) {
+    setToast({ open: true, message: 'Could not save preference', severity: 'warning' });
+        // ignore network errors silently
+      }
+    };
+    persist();
+  }, [expanded]);
+
+  const [toast, setToast] = useState({ open: false, message: '', severity: 'info' });
   // For tooltip on collapsed
   const [hovered, setHovered] = useState(null);
 
@@ -63,16 +93,31 @@ export default function Sidebar({ selected = "home", onSelect }) {
       <div className="sidebar-logo">
         <span className="logo"><img src="/logo192.png" alt="logo" style={{width: 24, height: 24}} /></span>
         {expanded && <span className="sidebar-title">Untitled</span>}
-        {expanded && <button className="sidebar-menu-btn"><svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" /></svg></button>}
+        {expanded && <button className="sidebar-menu-btn" aria-hidden><svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" /></svg></button>}
+      </div>
+      {/* Search */}
+      <div className="sidebar-search-wrap" aria-hidden={!expanded}>
+        <div className="sidebar-search" role="search">
+          <MagnifyingGlassIcon className="icon" />
+          {expanded ? (
+            <input
+              className="sidebar-search-input"
+              placeholder="Search"
+              value={query}
+              onChange={e => setQuery(e.target.value)}
+              aria-label="Search navigation"
+            />
+          ) : null}
+        </div>
       </div>
       {/* Main Navigation */}
-      <nav className="sidebar-nav">
-        {mainNav.map(({ name, key, icon: Icon, highlight }) => {
+      <nav className="sidebar-nav" role="navigation" aria-label="Main">
+        {mainNav.filter(item => item.name.toLowerCase().includes(query.toLowerCase())).map(({ name, key, icon: Icon, highlight }) => {
           // Map keys to route paths
           let to = "/";
-          if (key === "home") to = "/";
-          else if (key === "dashboard") to = "/boards/kanban";
-          else if (key === "projects") to = "/boards/kanban";
+          if (key === "home") to = "/home";
+          else if (key === "dashboard") to = "/dashboard";
+          else if (key === "projects") to = "/projects";
           else if (key === "taskboard") to = "/boards/taskboard";
           else if (key === "chat") to = "/chat";
           else if (key === "reporting") to = "/tools/ai";
@@ -98,10 +143,10 @@ export default function Sidebar({ selected = "home", onSelect }) {
           );
         })}
       </nav>
-      <div className="sidebar-divider" />
+  <div className="sidebar-divider" />
       {/* Lower Navigation */}
-      <nav className="sidebar-nav sidebar-nav-lower">
-        {lowerNav.map(({ name, key, icon: Icon, badge }) => {
+      <nav className="sidebar-nav sidebar-nav-lower" role="navigation" aria-label="Secondary">
+        {lowerNav.filter(item => item.name.toLowerCase().includes(query.toLowerCase())).map(({ name, key, icon: Icon, badge }) => {
           const isActive = selected === key;
           return (
             <div key={key} className="sidebar-nav-item">
@@ -123,7 +168,7 @@ export default function Sidebar({ selected = "home", onSelect }) {
         })}
       </nav>
       {/* User Profile */}
-      <div className="sidebar-profile">
+      <div className="sidebar-profile" aria-hidden={!expanded}>
         <div className="sidebar-avatar-wrap">
           <img src={user?.avatar || "/default-avatar.png"} alt="avatar" className="sidebar-avatar" />
           <span className="sidebar-avatar-online" style={{ display: user?.online !== false ? undefined : 'none' }} />
@@ -134,8 +179,14 @@ export default function Sidebar({ selected = "home", onSelect }) {
             <div className="sidebar-profile-email">{user.email}</div>
           </div>
         )}
-        {expanded && <button className="sidebar-profile-menu"><svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button>}
+        {expanded && <div style={{display:'flex',gap:8,alignItems:'center'}}>
+          <button className="sidebar-logout" onClick={() => setConfirmOpen(true)} title="Log out">Log out</button>
+          <button className="sidebar-profile-menu" aria-haspopup="true" aria-label="Profile menu"><svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button>
+        </div>}
+      <ConfirmDialog open={confirmOpen} title="Log out" message="Are you sure you want to log out?" onCancel={() => setConfirmOpen(false)} onConfirm={() => { setConfirmOpen(false); logout(); }} />
       </div>
+  <Toast open={toast.open} onClose={() => setToast(t => ({ ...t, open: false }))} severity={toast.severity}>{toast.message}</Toast>
+      
     </aside>
   );
 }

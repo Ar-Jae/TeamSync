@@ -11,3 +11,11 @@ export const chatProvider = new WebsocketProvider(
 
 // Shared array for chat messages
 export const chatYArray = chatYDoc.getArray('chat-messages');
+
+// Helper: create a new conversation id (simple timestamp-based id) and return it
+export function createConversationId() {
+  return `conv-${Date.now()}-${Math.floor(Math.random()*1000)}`;
+}
+
+// Optional: ensure conversations map exists
+export const conversationsMap = chatYDoc.getMap('conversations');

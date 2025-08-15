@@ -1,0 +1,43 @@
+.taskboard-root {
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 24px 18px 18px 18px;
+  border-radius: 16px;
+  background: #f8fafc;
+  min-height: 340px;
+  display: flex;
+  flex-direction: column;
+}
+
+.taskboard-title {
+  font-weight: 700;
+  color: #1976d2;
+  margin-bottom: 12px;
+}
+
+.taskboard-inputbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.taskboard-input {
+  flex: 1;
+}
+
+.taskboard-list {
+  flex: 1;
+  overflow-y: auto;
+  background: #e3f2fd;
+  border-radius: 8px;
+  padding: 0;
+}
+
+.taskboard-list .MuiListItem-root {
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.taskboard-list .MuiListItem-root:last-child {
+  border-bottom: none;
+}

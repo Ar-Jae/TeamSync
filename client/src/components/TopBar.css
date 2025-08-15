@@ -1,0 +1,89 @@
+/* TopBar.css - Modern Microsoft Teams–style top bar */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 4.2rem;
+  background: #23242b;
+  border-radius: 0 1.25rem 0.7rem 0;
+  box-shadow: 0 2px 8px 0 #00000011;
+  padding: 0 2rem 0 1.5rem;
+  position: sticky;
+  top: 0;
+  z-index: 30;
+}
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+.topbar-title {
+  color: #fff;
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+.topbar-search {
+  display: flex;
+  align-items: center;
+  background: #292a32;
+  border-radius: 0.7rem;
+  padding: 0.3rem 0.9rem;
+  gap: 0.7rem;
+}
+.topbar-search-input {
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 1rem;
+  outline: none;
+  width: 14rem;
+}
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+}
+.topbar-btn {
+  background: none;
+  border: none;
+  color: #bdbdbd;
+  position: relative;
+  border-radius: 0.5rem;
+  padding: 0.4rem 0.6rem;
+  cursor: pointer;
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+}
+.topbar-btn:hover {
+  background: #292a32;
+  color: #fff;
+}
+.topbar-badge {
+  background: #7c3aed;
+  color: #fff;
+  font-size: 0.75rem;
+  border-radius: 0.7rem;
+  padding: 0.1rem 0.5rem;
+  font-weight: 600;
+  position: absolute;
+  top: 0.2rem;
+  right: 0.2rem;
+}
+.topbar-profile {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.topbar-avatar {
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #292a32;
+}
+.topbar-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+}

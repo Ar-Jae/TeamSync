@@ -1,0 +1,244 @@
+/* Sidebar.css - Custom styles for the collapsible sidebar */
+
+
+/* Sidebar Layout */
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: #23242b;
+  box-shadow: 0 4px 24px 0 #00000022;
+  border-radius: 1.25rem;
+  transition: width 0.3s cubic-bezier(.4,0,.2,1);
+  font-family: 'Inter', 'Poppins', sans-serif;
+  position: relative;
+  overflow: hidden;
+}
+.sidebar.collapsed {
+  width: 4.2rem;
+}
+.sidebar.expanded {
+  width: 16rem;
+}
+
+/* Toggle Button */
+.sidebar-toggle {
+  background: none;
+  border: none;
+  color: #bdbdbd;
+  margin: 0.5rem 0.5rem 0.5rem auto;
+  padding: 0.25rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.sidebar-toggle:hover {
+  background: #292a32;
+}
+
+/* Logo/Brand */
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.7rem 1.2rem 0.7rem 1.2rem;
+  margin-bottom: 0.5rem;
+  min-height: 3.2rem;
+}
+.sidebar-logo .logo {
+  background: #7c3aed;
+  border-radius: 0.7rem;
+  width: 2.2rem;
+  height: 2.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: bold;
+  font-size: 1.3rem;
+}
+.sidebar-title {
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 600;
+  flex: 1;
+}
+.sidebar-menu-btn {
+  background: none;
+  border: none;
+  color: #bdbdbd;
+  margin-left: auto;
+  cursor: pointer;
+  border-radius: 0.4rem;
+  padding: 0.2rem 0.3rem;
+  transition: background 0.2s;
+}
+.sidebar-menu-btn:hover {
+  background: #292a32;
+}
+
+/* Search */
+.sidebar-search-wrap {
+  padding: 0 1.2rem 0.5rem 1.2rem;
+}
+.sidebar-search {
+  display: flex;
+  align-items: center;
+  background: #292a32;
+  border-radius: 0.7rem;
+  padding: 0.4rem 0.7rem;
+  gap: 0.7rem;
+}
+.sidebar-search-input {
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 1rem;
+  outline: none;
+  width: 100%;
+}
+
+/* Navigation */
+.sidebar-nav {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+.sidebar-nav-lower {
+  margin-bottom: 0.5rem;
+}
+.sidebar-nav-item {
+  position: relative;
+}
+.sidebar-btn {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 0.6rem 1.2rem;
+  border-radius: 0.7rem;
+  background: none;
+  border: none;
+  color: #bdbdbd;
+  font-size: 1rem;
+  cursor: pointer;
+  position: relative;
+  transition: background 0.2s, color 0.2s;
+  outline: none;
+  margin-bottom: 0.1rem;
+}
+.sidebar-btn .icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-right: 0.7rem;
+}
+.sidebar-btn-label {
+  flex: 1;
+  text-align: left;
+  font-size: 1rem;
+  color: #e0e0e0;
+}
+.sidebar-btn.active, .sidebar-btn.highlight {
+  background: #292a32;
+  color: #7c3aed;
+  font-weight: 600;
+}
+.sidebar-btn.active .sidebar-btn-label, .sidebar-btn.highlight .sidebar-btn-label {
+  color: #7c3aed;
+}
+.sidebar-btn:hover {
+  background: #292a32;
+  color: #fff;
+}
+.sidebar-btn .sidebar-badge {
+  background: #7c3aed;
+  color: #fff;
+  font-size: 0.75rem;
+  border-radius: 0.7rem;
+  padding: 0.1rem 0.5rem;
+  margin-left: 0.7rem;
+  font-weight: 600;
+}
+.sidebar-divider {
+  margin: 0.7rem 1.2rem;
+  border-bottom: 1px solid #292a32;
+}
+
+/* Tooltip */
+.sidebar-tooltip {
+  position: absolute;
+  left: 110%;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #181A20;
+  color: #fff;
+  padding: 0.3rem 0.8rem;
+  border-radius: 0.5rem;
+  font-size: 0.95rem;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px 0 #00000022;
+  z-index: 10;
+  pointer-events: none;
+  opacity: 0.97;
+}
+
+/* User Profile */
+.sidebar-profile {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 1.1rem 1.2rem 1.1rem 1.2rem;
+  background: #23242b;
+  border-radius: 0 0 1.25rem 1.25rem;
+  min-height: 4.2rem;
+  margin-top: auto;
+}
+.sidebar-avatar-wrap {
+  position: relative;
+  width: 2.3rem;
+  height: 2.3rem;
+}
+.sidebar-avatar {
+  width: 2.3rem;
+  height: 2.3rem;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #292a32;
+}
+.sidebar-avatar-online {
+  position: absolute;
+  right: 0.15rem;
+  bottom: 0.15rem;
+  width: 0.7rem;
+  height: 0.7rem;
+  background: #20C997;
+  border: 2px solid #23242b;
+  border-radius: 50%;
+}
+.sidebar-profile-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+.sidebar-profile-name {
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 600;
+}
+.sidebar-profile-email {
+  color: #bdbdbd;
+  font-size: 0.85rem;
+}
+.sidebar-profile-menu {
+  background: none;
+  border: none;
+  color: #bdbdbd;
+  margin-left: auto;
+  cursor: pointer;
+  border-radius: 0.4rem;
+  padding: 0.2rem 0.3rem;
+  transition: background 0.2s;
+}
+.sidebar-profile-menu:hover {
+  background: #292a32;
+}

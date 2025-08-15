@@ -8,8 +8,11 @@
     "@hello-pangea/dnd": "^18.0.1",
     "@mui/icons-material": "^7.3.1",
     "@mui/material": "^7.3.1",
+    "ajv": "^8.17.1",
+    "ajv-keywords": "^5.1.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
+    "react-router-dom": "^6.x.x",
     "y-websocket": "^3.0.0",
     "yjs": "^13.6.27"
   },

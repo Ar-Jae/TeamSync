@@ -1,10 +1,10 @@
 import React from "react";
 import './TopBar.css';
-import { BellIcon, Cog6ToothIcon, MagnifyingGlassIcon, ArrowRightOnRectangleIcon } from "@heroicons/react/24/outline";
+import { BellIcon, Cog6ToothIcon, MagnifyingGlassIcon, ArrowRightOnRectangleIcon, ChatBubbleLeftRightIcon } from "@heroicons/react/24/outline";
 import { useAuth } from "./AuthProvider";
 import ConfirmDialog from './ConfirmDialog';
 
-export default function TopBar({ onSettings }) {
+export default function TopBar({ onSettings, onToggleChat }) {
   const { user, logout } = useAuth();
   const [confirmOpen, setConfirmOpen] = React.useState(false);
   return (
@@ -17,6 +17,9 @@ export default function TopBar({ onSettings }) {
         </div>
       </div>
       <div className="topbar-right">
+        <button className="topbar-btn" aria-label="Chat" onClick={onToggleChat} title="Toggle chat panel">
+          <ChatBubbleLeftRightIcon className="topbar-icon" />
+        </button>
         <button className="topbar-btn" aria-label="Notifications">
           <BellIcon className="topbar-icon" />
           <span className="topbar-badge">2</span>

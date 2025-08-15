@@ -40,7 +40,7 @@ const lowerNav = [
 
 
 
-export default function Sidebar({ selected = "home", onSelect }) {
+export default function Sidebar({ selected = "home", onSelect, onToggleChat }) {
   const { user, logout } = useAuth();
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [expanded, setExpanded] = useState(() => {
@@ -74,6 +74,28 @@ export default function Sidebar({ selected = "home", onSelect }) {
   const [toast, setToast] = useState({ open: false, message: '', severity: 'info' });
   // For tooltip on collapsed
   const [hovered, setHovered] = useState(null);
+
+  function ChatButton({ Icon, name, highlight, expanded, hoveredKey, setHovered }) {
+    const handleOpen = (e) => {
+      e.preventDefault();
+      if (onToggleChat) onToggleChat();
+    };
+    return (
+      <button
+        className={`sidebar-btn${highlight ? ' highlight' : ''}`}
+        onClick={handleOpen}
+        onMouseEnter={() => setHovered(name.toLowerCase())}
+        onMouseLeave={() => setHovered(null)}
+        aria-label={name}
+      >
+        <Icon className="icon" />
+        {expanded && <span className="sidebar-btn-label">{name}</span>}
+        {!expanded && hoveredKey === name.toLowerCase() && (
+          <span className="sidebar-tooltip">{name}</span>
+        )}
+      </button>
+    );
+  }
 
   return (
     <aside className={`sidebar ${expanded ? 'expanded' : 'collapsed'}`}> 
@@ -112,33 +134,37 @@ export default function Sidebar({ selected = "home", onSelect }) {
       </div>
       {/* Main Navigation */}
       <nav className="sidebar-nav" role="navigation" aria-label="Main">
-        {mainNav.filter(item => item.name.toLowerCase().includes(query.toLowerCase())).map(({ name, key, icon: Icon, highlight }) => {
+  {mainNav.filter(item => item.name.toLowerCase().includes(query.toLowerCase())).map(({ name, key, icon: Icon, highlight }) => {
           // Map keys to route paths
+          // For chat we don't want to navigate — it should open a drawer instead
           let to = "/";
           if (key === "home") to = "/home";
           else if (key === "dashboard") to = "/dashboard";
           else if (key === "projects") to = "/projects";
           else if (key === "taskboard") to = "/boards/taskboard";
-          else if (key === "chat") to = "/chat";
           else if (key === "reporting") to = "/tools/ai";
           else to = `/${key}`;
           return (
             <div key={key} className="sidebar-nav-item">
-              <NavLink
-                to={to}
-                className={({ isActive }) =>
-                  `sidebar-btn${isActive ? ' active' : ''}${highlight ? ' highlight' : ''}`
-                }
-                onMouseEnter={() => setHovered(key)}
-                onMouseLeave={() => setHovered(null)}
-                end={to === "/"}
-              >
-                <Icon className="icon" />
-                {expanded && <span className="sidebar-btn-label">{name}</span>}
-                {!expanded && hovered === key && (
-                  <span className="sidebar-tooltip">{name}</span>
-                )}
-              </NavLink>
+              {key === 'chat' ? (
+                <ChatButton Icon={Icon} name={name} highlight={highlight} expanded={expanded} hoveredKey={hovered} setHovered={k => setHovered(k)} />
+              ) : (
+                <NavLink
+                  to={to}
+                  className={({ isActive }) =>
+                    `sidebar-btn${isActive ? ' active' : ''}${highlight ? ' highlight' : ''}`
+                  }
+                  onMouseEnter={() => setHovered(key)}
+                  onMouseLeave={() => setHovered(null)}
+                  end={to === "/"}
+                >
+                  <Icon className="icon" />
+                  {expanded && <span className="sidebar-btn-label">{name}</span>}
+                  {!expanded && hovered === key && (
+                    <span className="sidebar-tooltip">{name}</span>
+                  )}
+                </NavLink>
+              )}
             </div>
           );
         })}

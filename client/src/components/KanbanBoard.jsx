@@ -337,6 +337,50 @@ const KanbanBoard = () => {
     <>
     <Box className="kanban-root" sx={{ flexGrow: 1, mt: 4 }}>
       {error && <div style={{ color: 'red', marginBottom: 8 }}>{error}</div>}
+      {/* Board header with Add task moved to top */}
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+        <Typography variant="h5">Board</Typography>
+        <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+          <Button variant="contained" startIcon={<AddIcon />} onClick={() => setAddOpen(true)}>Add task</Button>
+        </Box>
+      </Box>
+
+      <Dialog open={addOpen} onClose={() => setAddOpen(false)}>
+        <DialogTitle>Create task</DialogTitle>
+        <DialogContent>
+          <TextField autoFocus label="Title" fullWidth value={form.title} onChange={e => setForm(f => ({ ...f, title: e.target.value }))} sx={{ mt: 1 }} />
+          <TextField label="Description" fullWidth value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} sx={{ mt: 2 }} multiline rows={3} />
+          <TextField
+            label="Due date"
+            type="date"
+            value={form.dueDate}
+            onChange={e => setForm(f => ({ ...f, dueDate: e.target.value }))}
+            InputLabelProps={{ shrink: true }}
+            sx={{ mt: 2 }}
+          />
+          <FormControl fullWidth sx={{ mt: 2 }}>
+            <InputLabel id="assignee-label">Assignee</InputLabel>
+            <Select labelId="assignee-label" value={form.assignedTo} label="Assignee" onChange={e => setForm(f => ({ ...f, assignedTo: e.target.value }))}>
+              <MenuItem value="">Unassigned</MenuItem>
+              {users.map(u => (
+                <MenuItem key={u._id || u.id} value={u._id || u.id}>{u.name || `${u.firstName || ''} ${u.lastName || ''}`.trim() || u.email}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <FormControl fullWidth sx={{ mt: 2 }}>
+            <InputLabel id="priority-label">Priority</InputLabel>
+            <Select labelId="priority-label" value={form.priority} label="Priority" onChange={e => setForm(f => ({ ...f, priority: e.target.value }))}>
+              <MenuItem value="low">Low</MenuItem>
+              <MenuItem value="medium">Medium</MenuItem>
+              <MenuItem value="high">High</MenuItem>
+            </Select>
+          </FormControl>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setAddOpen(false)}>Cancel</Button>
+          <Button onClick={() => { handleAddTask(form); setForm({ title: '', description: '', assignedTo: '', dueDate: '' }); setAddOpen(false); }} variant="contained">Create</Button>
+        </DialogActions>
+      </Dialog>
       <DragDropContext onDragEnd={onDragEnd}>
         <Grid container columns={12} columnSpacing={2}>
           {data.columnOrder.map((colId) => {
@@ -350,48 +394,7 @@ const KanbanBoard = () => {
                   <div className="title">{column.title}</div>
                   <div className="kanban-count">{validTasks.length}</div>
                 </div>
-                {colId === 'todo' && (
-                  <Box sx={{ display: 'flex', gap: 1, mb: 2, justifyContent: 'center', alignItems: 'center' }}>
-                    <Button variant="contained" startIcon={<AddIcon />} onClick={() => setAddOpen(true)}>Add task</Button>
-
-                    <Dialog open={addOpen} onClose={() => setAddOpen(false)}>
-                      <DialogTitle>Create task</DialogTitle>
-                      <DialogContent>
-                        <TextField autoFocus label="Title" fullWidth value={form.title} onChange={e => setForm(f => ({ ...f, title: e.target.value }))} sx={{ mt: 1 }} />
-                        <TextField label="Description" fullWidth value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} sx={{ mt: 2 }} multiline rows={3} />
-                        <TextField
-                          label="Due date"
-                          type="date"
-                          value={form.dueDate}
-                          onChange={e => setForm(f => ({ ...f, dueDate: e.target.value }))}
-                          InputLabelProps={{ shrink: true }}
-                          sx={{ mt: 2 }}
-                        />
-                        <FormControl fullWidth sx={{ mt: 2 }}>
-                          <InputLabel id="assignee-label">Assignee</InputLabel>
-                          <Select labelId="assignee-label" value={form.assignedTo} label="Assignee" onChange={e => setForm(f => ({ ...f, assignedTo: e.target.value }))}>
-                            <MenuItem value="">Unassigned</MenuItem>
-                            {users.map(u => (
-                              <MenuItem key={u._id || u.id} value={u._id || u.id}>{u.name || `${u.firstName || ''} ${u.lastName || ''}`.trim() || u.email}</MenuItem>
-                            ))}
-                          </Select>
-                        </FormControl>
-                        <FormControl fullWidth sx={{ mt: 2 }}>
-                          <InputLabel id="priority-label">Priority</InputLabel>
-                          <Select labelId="priority-label" value={form.priority} label="Priority" onChange={e => setForm(f => ({ ...f, priority: e.target.value }))}>
-                            <MenuItem value="low">Low</MenuItem>
-                            <MenuItem value="medium">Medium</MenuItem>
-                            <MenuItem value="high">High</MenuItem>
-                          </Select>
-                        </FormControl>
-                      </DialogContent>
-                      <DialogActions>
-                        <Button onClick={() => setAddOpen(false)}>Cancel</Button>
-                        <Button onClick={() => { handleAddTask(form); setForm({ title: '', description: '', assignedTo: '', dueDate: '' }); setAddOpen(false); }} variant="contained">Create</Button>
-                      </DialogActions>
-                    </Dialog>
-                  </Box>
-                )}
+                {/* Add task moved to board header */}
                 <Droppable droppableId={column.id}>
                   {(provided, snapshot) => (
                     <Box

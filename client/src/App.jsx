@@ -10,7 +10,7 @@ import Home from './components/Home';
 
 import KanbanBoard from './components/KanbanBoard';
 import TaskBoard from './components/TaskBoard';
-import ChatView from './components/ChatView';
+
 import Projects from './components/Projects';
 // ...existing code...
 import TopBar from './components/TopBar';
@@ -53,7 +53,6 @@ const router = createBrowserRouter(
       <Route path="boards/taskboard" element={<TaskBoard />} />
       <Route path="boards/canvas" element={<CanvasBoard />} />
       <Route path="tools/ai" element={<AIControls />} />
-      <Route path="chat" element={<ChatView />} />
       <Route path="settings" element={<div>Settings coming soon...</div>} />
     </Route>
   ),
